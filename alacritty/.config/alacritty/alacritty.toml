@@ -1,0 +1,46 @@
+[[mouse.bindings]]
+mouse = "Right"
+action = "Paste"
+
+[scrolling]
+history = 1000
+multiplier = 3
+
+[mouse]
+hide_when_typing = false
+
+[selection]
+save_to_clipboard = true
+
+# [[keyboard.bindings]]
+# key = "ø"
+# mods = "Control"
+# chars = "\uE120"
+#
+# [[keyboard.bindings]]
+# key = "æ"
+# mods = "Control"
+# chars = "\uE121"
+
+[font]
+size = 12
+
+[font.normal]
+family = "UbuntuMono Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "UbuntuMono Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "UbuntuMono Nerd Font"
+style = "Italic"
+
+[font.bold_italic]
+family = "UbuntuMono Nerd Font"
+style = "Bold Italic"
+
+[env]
+TERM = "xterm-256color"
+
