@@ -11,6 +11,7 @@ return {
       vim.keymap.set({ 'n', 'v' }, '<C-l>', ':TmuxNavigateUp<CR>')
       -- vim.keymap.set({ 'n', 'v' }, vim.fn.nr2char(57632), ':TmuxNavigateRight<CR>')
       vim.keymap.set({ 'n', 'v' }, '<F47>', ':TmuxNavigateRight<CR>')
+      vim.keymap.set({ 'n', 'v' }, '<C-h>', '<C-W>v', { desc = 'Split window vertically' })
     end,
   },
 }

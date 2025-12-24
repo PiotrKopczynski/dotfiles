@@ -235,8 +235,8 @@ vim.o.confirm = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror' })
+vim.keymap.set('n', 'gQ', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', 'ge', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -274,8 +274,9 @@ vim.keymap.set({ 'n', 'v' }, '<C-w>J', '<C-W>H', { desc = 'Move window to the fa
 vim.keymap.set({ 'n', 'v' }, '<C-w>K', '<C-W>J', { desc = 'Move window to the bottom' })
 vim.keymap.set({ 'n', 'v' }, '<C-w>L', '<C-W>K', { desc = 'Move window to the top' })
 vim.keymap.set({ 'n', 'v' }, '<C-w>Ø', '<C-W>L', { desc = 'Move window to the far right' })
-vim.keymap.set({ 'n', 'v' }, '<C-w>æ', '<C-W>s', { desc = 'Split window' })
-vim.keymap.set({ 'n', 'v' }, '<C-w>h', '<C-W>v', { desc = 'Split window vertically' })
+vim.keymap.set({ 'n', 'v' }, '<F48>', '<C-W>s', { desc = 'Split window' })
+-- This is set in custom init.lua
+-- vim.keymap.set({ 'n', 'v' }, '<C-h>', '<C-W>v', { desc = 'Split window vertically' })
 
 -- Remap movement keys
 vim.keymap.set({ 'n', 'v' }, 'j', 'h', { noremap = true })
@@ -284,8 +285,8 @@ vim.keymap.set({ 'n', 'v' }, 'l', 'k', { noremap = true })
 vim.keymap.set({ 'n', 'v' }, 'ø', 'l', { noremap = true })
 
 -- Remap moving to first nonwhite character in the line, and jumping to end of line
-vim.keymap.set({ 'n', 'v' }, 'h', '^', { noremap = true })
-vim.keymap.set({ 'n', 'v' }, 'æ', '$', { noremap = true })
+vim.keymap.set({ 'n', 'v', 'o' }, 'h', '^', { noremap = true })
+vim.keymap.set({ 'n', 'v', 'o' }, 'æ', '$', { noremap = true })
 
 -- Remap moving through jumlist history
 vim.keymap.set({ 'n', 'v' }, '<M-j>', '<C-o>', { noremap = true })
@@ -833,6 +834,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
+        bashls = {},
         ts_ls = {
           settings = {
             typescript = {

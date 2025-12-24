@@ -1,0 +1,71 @@
+# Basic replacement: adds icons and sorts folders first
+alias ll="eza -l --icons --git --group-directories-first -a"
+
+# Detailed list: includes git status, file sizes, and headers
+alias ls='eza -lh --icons --git --group-directories-first --header'
+
+# All files (including hidden/dotfiles)
+alias la='eza -la --icons --group-directories-first'
+
+# Tree view: great for seeing project structure
+alias lt='eza --tree --level=2 --icons'
+
+#bat
+# Polyfill for batcat/bat compatibility
+if command -v batcat > /dev/null; then
+    alias batcat='bat'
+fi
+
+# Git
+alias gc="git commit -m"
+alias gca="git commit -a -m"
+alias gf="git fetch"
+alias gp="git push"
+alias gpo="git pull origin"
+alias gst="git status"
+alias gs="git switch"
+alias glog="git log --graph --topo-order --pretty='%w(100,0,6)%C(yellow)%h%C(bold)%C(black)%d %C(cyan)%ar %C(green)%an%n%C(bold)%C(white)%s %N' --abbrev-commit"
+alias gdiff="git diff"
+alias gb='git branch'
+alias gba='git branch -a'
+alias ga='git add'
+alias gap='git add -p'
+alias gr='git rebase'
+alias gre='git reset'
+
+# Dirs
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
+
+# Tmux
+# Attaches tmux to a session (example: ta portal)
+alias ta='tmux attach -t'
+# Creates a new session
+alias tn='tmux new-session -s '
+# Kill session
+alias tk='tmux kill-session -t '
+# Lists all ongoing sessions
+alias tl='tmux list-sessions'
+# Detach from session
+alias td='tmux detach'
+# Tmux Clear pane
+alias tc='clear; tmux clear-history; clear'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+
+function t() {
+  {
+    exec </dev/tty
+    exec <&1
+    local session
+    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  ')
+    [[ -z "$session" ]] && return
+    sesh connect $session
+  }
+}

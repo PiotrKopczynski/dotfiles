@@ -1,0 +1,16 @@
+build-essential
+tmux
+ripgrep
+fd-find
+fzf
+bat
+alacritty
+btop
+flameshot
+shellcheck
+rofi
+stow
+gzip
+unzip
+
+

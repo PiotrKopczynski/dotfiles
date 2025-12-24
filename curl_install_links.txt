@@ -1,0 +1,6 @@
+# Name|URL|Shell|OS (all, linux, mac)
+zoxide|https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh|sh|linux
+sdk|https://get.sdkman.io|bash|all
+starship|https://starship.rs/install.sh|sh|linux
+atuin|https://setup.atuin.sh|sh|all
+
