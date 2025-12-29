@@ -38,4 +38,7 @@ function zvm_after_init() {
   # --- Copy Binding ---
   # Bind 'y' in Visual mode
   zvm_bindkey visual 'y' clipboard_copy_widget
+
+  # Let vim mode handle ctrl+r
+  # zvm_bindkey vimcd '^R' redisplay
 }
