@@ -274,9 +274,9 @@ vim.keymap.set({ 'n', 'v' }, '<C-w>J', '<C-W>H', { desc = 'Move window to the fa
 vim.keymap.set({ 'n', 'v' }, '<C-w>K', '<C-W>J', { desc = 'Move window to the bottom' })
 vim.keymap.set({ 'n', 'v' }, '<C-w>L', '<C-W>K', { desc = 'Move window to the top' })
 vim.keymap.set({ 'n', 'v' }, '<C-w>Ø', '<C-W>L', { desc = 'Move window to the far right' })
-vim.keymap.set({ 'n', 'v' }, '<F48>', '<C-W>s', { desc = 'Split window' })
--- This is set in custom init.lua
--- vim.keymap.set({ 'n', 'v' }, '<C-h>', '<C-W>v', { desc = 'Split window vertically' })
+
+vim.keymap.set({ 'n', 'v' }, '<C-h>', '<C-W>v', { desc = 'Split window vertically' })
+vim.keymap.set({ 'n', 'v' }, '<F48>', '<C-W>s', { desc = 'Split window horisontally' })
 
 -- Remap movement keys
 vim.keymap.set({ 'n', 'v' }, 'j', 'h', { noremap = true })
@@ -1189,6 +1189,8 @@ require('lazy').setup({
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
+      -- Stop mini.files from opening menu when starting neovim
+      vim.g.mini_files_disable_autocmds = true
       -- Better Around/Inside textobjects
       --
       -- Examples:
@@ -1209,6 +1211,26 @@ require('lazy').setup({
           -- [')'] = { output = { left = '( ', right = ' )' } },
         },
       }
+
+      require('mini.files').setup {
+        mappings = {
+          close = 'q',
+          go_in = 'ø',
+          go_in_plus = '<CR>',
+          go_out = 'j',
+          go_out_plus = 'J',
+          reset = '<BS>',
+          reveal_cwd = '@',
+          show_help = 'g?',
+          synchronize = '=',
+          trim_left = '<',
+          trim_right = '>',
+        },
+      }
+
+      vim.keymap.set('n', '-', function()
+        require('mini.files').open()
+      end, { desc = 'Open mini.files' })
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
