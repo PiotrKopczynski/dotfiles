@@ -688,6 +688,11 @@ require('lazy').setup({
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.name == 'ltex' then
+            client.handlers['$/progress'] = function() end
+          end
+
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
           map('gR', vim.lsp.buf.rename, '[R]e[n]ame')
