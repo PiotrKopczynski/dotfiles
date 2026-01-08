@@ -6,10 +6,19 @@ return {
       'sindrets/diffview.nvim', -- optional - Diff integration
 
       -- Only one of these is needed.
-      'nvim-telescope/telescope.nvim', -- optional
+      -- 'nvim-telescope/telescope.nvim', -- optional
       -- 'ibhagwan/fzf-lua', -- optional
       -- 'nvim-mini/mini.pick', -- optional
-      -- 'folke/snacks.nvim', -- optional
+      'folke/snacks.nvim', -- optional
+    },
+    keys = {
+      {
+        '<leader>gg',
+        function()
+          require('neogit').open { kind = 'floating' }
+        end,
+        desc = 'Open Neogit',
+      },
     },
     config = function()
       local neogit = require 'neogit'
@@ -17,7 +26,10 @@ return {
         mappings = {
           status = {
             ['k'] = 'MoveDown',
-            -- ['l'] = 'MoveUp',
+            ['l'] = 'MoveUp',
+          },
+          popup = {
+            ['j'] = 'LogPopup',
           },
         },
       }

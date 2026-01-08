@@ -293,6 +293,10 @@ vim.keymap.set({ 'n', 'v', 'o' }, 'æ', '$', { noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<M-j>', '<C-o>', { noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<M-ø>', '<C-i>', { noremap = true })
 
+-- Neogit & fugitive
+-- local neogit = require('neogit')
+vim.keymap.set('n', '<leader>gB', ':G blame<CR>', { silent = true, noremap = true })
+
 -- Set GitSigns colors
 vim.api.nvim_set_hl(0, 'GitSignsAdd', { fg = '#00ff00', bg = 'NONE' }) -- Bright green for additions
 vim.api.nvim_set_hl(0, 'GitSignsChange', { fg = '#ffff00', bg = 'NONE' }) -- Bright yellow for changes
@@ -851,7 +855,6 @@ require('lazy').setup({
         emmet_language_server = {}, -- LSP for jsx and tsx
         marksman = {}, --Markdown LSP
         ltex = {},
-
         -- eslint = {
         --   settings = {
         --     workingDirectory = { mode = 'auto' },
@@ -859,7 +862,6 @@ require('lazy').setup({
         --   },
         --   root_dir = require('lspconfig.util').root_pattern('.eslintrc', '.eslintrc.js', '.eslintrc.json', 'package.json'),
         -- },
-
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -1209,6 +1211,22 @@ require('lazy').setup({
           -- Flip the parenthesis behavior
           -- ['('] = { output = { left = '(', right = ')' } },
           -- [')'] = { output = { left = '( ', right = ' )' } },
+        },
+      }
+
+      require('mini.move').setup {
+        mappings = {
+          -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
+          left = 'J',
+          right = 'Ø',
+          down = 'K',
+          up = 'L',
+
+          -- Move current line in Normal mode
+          line_left = 'J',
+          line_right = 'Ø',
+          line_down = 'K',
+          line_up = 'L',
         },
       }
 

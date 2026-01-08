@@ -11,6 +11,14 @@ return {
         json = { 'jsonlint' },
       }
 
+      -- Customize markdownlint to ignore MD013 (Line Length)
+      local mdlint = lint.linters.markdownlint
+      mdlint.args = {
+        '--config',
+        -- This creates a JSON string on the fly to disable the rule
+        '~/.markdownlint.json',
+        '--',
+      }
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
       -- lint.linters_by_ft = lint.linters_by_ft or {}
