@@ -1,0 +1,23 @@
+map k scrollDown
+map l scrollUp
+
+map j scrollLeft
+map ø scrollRight
+map h scrollToLeft
+map æ scrollToRight
+
+map u goBack
+map U goForward
+
+map K nextTab
+map L previousTab
+
+map q removeTab
+map Q restoreTab
+
+map w moveTabToNewWindow
+
+map <shift-w> moveTabToNextWindow
+
+unmap H
+unmap zL
