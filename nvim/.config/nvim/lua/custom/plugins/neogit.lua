@@ -27,6 +27,7 @@ return {
           status = {
             ['k'] = 'MoveDown',
             ['l'] = 'MoveUp',
+            ['j'] = false,
           },
           popup = {
             ['j'] = 'LogPopup',

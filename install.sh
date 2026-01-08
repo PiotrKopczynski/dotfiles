@@ -6,6 +6,7 @@
 # Install Karabiner-Elements
 # Install Aerospace
 # Install neovim from: https://github.com/neovim/neovim/releases/tag/stable
+# Remember to correctly alias neovim to vi
 # Remember to install lsp-servers from npm
 #Installed nvm (Node Package Manager for which is a version manager) WSL using: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash (verify installation nvm -v)
 #Installed current stable release of Node.js (LTS release) using: nvm install --lts (You can install the current release using nvm install node) (verify installation: node --version; nvm --version)
