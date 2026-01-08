@@ -48,6 +48,14 @@ source $HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 #set vim mode
 ZVM_VI_SURROUND_BINDKEY=smap # This enables 'sa', 'sd', 'sr' (add, delete, replace)
 ZVM_VI_HIGHLIGHT_SELECTION=true
+# 1. Enable the built-in system clipboard integration
+export ZVM_SYSTEM_CLIPBOARD_ENABLED=true
+# 2. Tell it which tool to use (this avoids the logic in your current config)
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Use xclip (usually more stable than xsel for piping)
+ZVM_CLIPBOARD_COPY_CMD='xclip -selection clipboard'
+ZVM_CLIPBOARD_PASTE_CMD='xclip -selection clipboard -o'
+fi
 # bindkey -v
 # Path to your custom vim-mode file
 ZVM_CONFIG="$HOME/.config/zsh/keybindings.zsh"
