@@ -69,3 +69,87 @@ function t() {
     sesh connect $session
   }
 }
+
+# Edit remote directory over ssh
+rvi() {
+	local SERVER="$1"
+	local RPATH="${2:-"."}" # Defaults to servers home directory for the configured user
+	local MOUNT_POINT="$HOME/mnt_$SERVER"
+
+	# Create a unique mount point for the server
+	mkdir -p "$MOUNT_POINT"
+
+	# Mount using ssh config alias
+	sshfs "$SERVER:$RPATH" "$MOUNT_POINT" -o follow_symlinks,idmap=user
+
+	if [[ $? -eq 0 ]]; then
+		# Open neovim
+		nvim "$MOUNT_POINT"
+		# Cleanup
+		cd ~ # go to home directory in case the terminal is in the directory that is about to be unmounted
+		if command -v fusermount >/dev/null; then
+		  fusermount -uz "$MOUNT_POINT"
+		else
+		  umount "$MOUNT_POINT"
+		fi
+		echo "Connection to $SERVER closed and mount cleaned up."
+	else
+		echo "Error: Could not connect to $SERVER. Check your .ssh/config or ~/config/zsh/.zsh_aliases"
+	fi
+	# wait a second before removing the dir to let the unmounting process finish
+	sleep 0.5
+	rmdir "$MOUNT_POINT" 2>/dev/null || echo "Note: Mount point still clearing, will be removed later."
+}
+
+# Edit remote file over ssh, using sudo if needed (will not work if file requires sudo for read)
+# If the file has write access for the user, the script uses neovim netrw to write to the file.
+# If the file requires sudo -> the script creates a temporary file locally -> writes the contents of the remote file to it ->
+#
+#
+rvif() {
+  local SERVER="$1"
+  local REMOTE_FILE="$2"
+
+  if [[ -z "$SERVER" || -z "$REMOTE_FILE" ]]; then
+    echo "Usage: rvif user@host /path/to/file"
+    return 1
+  fi
+
+   # If writable normally, use netrw
+  if ssh "$SERVER" "[ -w '$REMOTE_FILE' ]"; then
+
+    nvim --cmd "let g:netrw_silent=1" "scp://$SERVER//$REMOTE_FILE"
+
+    return
+  fi 
+
+  echo "File requires sudo for writing"
+  local TMPFILE
+  TMPFILE=$(mktemp)
+  
+  echo "Downloading $REMOTE_FILE..."
+  ssh "$SERVER" "cat '$REMOTE_FILE'" > "$TMPFILE" || {
+    echo "Could not read file. You might need sudo to even READ this file."
+    rm -f "$TMPFILE"
+    return 1
+  }
+
+  # EDIT: Edit locally
+  nvim "$TMPFILE"
+
+  # WRITE: Upload to a remote temp path first
+  local REMOTE_TMP="/tmp/rvif_transfer_$(date +%s)"
+  echo "Uploading changes..."
+  scp "$TMPFILE" "$SERVER:$REMOTE_TMP"
+
+  # 4. OVERWRITE: Overwrite the contents of the original file without replacing the file itself
+  echo "Applying changes with sudo..."
+  ssh -t "$SERVER" "sudo tee '$REMOTE_FILE' < '$REMOTE_TMP' > /dev/null && rm '$REMOTE_TMP'" || {
+    echo "Failed to write remote file"
+    rm -f "$TMPFILE"
+    return 1
+  }
+
+  rm -f "$TMPFILE"
+  echo "Saved successfully."
+}
