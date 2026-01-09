@@ -327,6 +327,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- Automatically reload the file when it changes outside Neovim (like after a stash)
 vim.opt.autoread = true
 
+-- Trigger checktime whenever you change focus or enter a buffer
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
+  callback = function()
+    if vim.fn.mode() ~= 'c' then
+      vim.cmd 'checktime'
+    end
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
