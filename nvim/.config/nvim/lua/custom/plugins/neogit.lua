@@ -30,8 +30,24 @@ return {
             ['j'] = false,
           },
           popup = {
+            ['l'] = false,
             ['j'] = 'LogPopup',
           },
+        },
+        popup = {
+          kind = 'floating',
+        },
+        stash = {
+          kind = 'floating',
+        },
+        commit_editor = {
+          kind = 'floating',
+        },
+        commit_view = {
+          kind = 'floating',
+        },
+        preview_buffer = {
+          kind = 'floating',
         },
       }
     end,

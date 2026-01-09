@@ -324,6 +324,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Automatically reload the file when it changes outside Neovim (like after a stash)
+vim.opt.autoread = true
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
