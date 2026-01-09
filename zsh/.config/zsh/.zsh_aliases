@@ -16,6 +16,9 @@ if command -v batcat > /dev/null; then
     alias batcat='bat'
 fi
 
+# Interactive rm
+alias rm='rm -i'
+
 # Git
 alias gc="git commit -m"
 alias gca="git commit -a -m"
