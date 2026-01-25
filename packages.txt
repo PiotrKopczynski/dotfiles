@@ -12,5 +12,9 @@ rofi
 stow
 gzip
 unzip
-
-
+git-crypt
+1password
+shellcheck
+trash-cli
+zsh
+chafa

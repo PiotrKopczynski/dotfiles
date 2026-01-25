@@ -15,7 +15,13 @@ brew "starship"
 brew "btop"
 brew "shellcheck"
 brew "atuin"
+brew "git-crypt"
+brew "trash-cli"
+brew "shellcheck"
+brew "chafa"
 
 # Casks (GUI Applications)
 cask "alacritty"
 cask "font-ubuntu-mono-nerd-font"
+cask "obsidian"
+cask "1password"

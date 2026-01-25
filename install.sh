@@ -17,6 +17,8 @@
 # Download mvn and java using sdkman
 # Find some application launcher for Mac
 # Autotiling for ubuntu
+# Install Obsidian for notes
+# Install OpenRGB if needed to control lights
 
 DOTFILES_DIR=$(pwd)
 OS="$(uname)"
