@@ -7,6 +7,7 @@ return {
   ---@type AutoSession.Config
   opts = {
     suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
+    bypass_save_filetypes = {},
     -- log_level = 'debug',
   },
 }
