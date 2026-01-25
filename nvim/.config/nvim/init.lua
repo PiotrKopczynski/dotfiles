@@ -1,91 +1,3 @@
---[[
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||   KICKSTART.NVIM   ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
-
-What is Kickstart?
-
-  Kickstart.nvim is *not* a distribution.
-
-  Kickstart.nvim is a starting point for your own configuration.
-    The goal is that you can read every line of code, top-to-bottom, understand
-    what your configuration is doing, and modify it to suit your needs.
-
-    Once you've done that, you can start exploring, configuring and tinkering to
-    make Neovim your own! That might mean leaving Kickstart just the way it is for a while
-    or immediately breaking it into modular pieces. It's up to you!
-
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
-
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
-
-Kickstart Guide:
-
-  TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
-
-    If you don't know what this means, type the following:
-      - <escape key>
-      - :
-      - Tutor
-      - <enter key>
-
-    (If you already know the Neovim basics, you can skip this step.)
-  
-  Once you've completed that, you can continue working through **AND READING** the rest
-  of the kickstart init.lua.
-
-  Next, run AND READ `:help`.
-    This will open up a help window with some basic information
-    about reading, navigating and searching the builtin help documentation.
-
-    This should be the first place you go to look when you're stuck or confused
-    with something. It's one of my favorite Neovim features.
-
-    MOST IMPORTANTLY, we provide a keymap "<space>sh" to [s]earch the [h]elp documentation,
-    which is very useful when you're not exactly sure of what you're looking for.
-
-  I have left several `:help X` comments throughout the init.lua
-    These are hints about where to find more information about the relevant settings,
-    plugins or Neovim features used in Kickstart.
-
-   NOTE: Look for lines like this
-
-    Throughout the file. These are for you, the reader, to help you understand what is happening.
-    Feel free to delete them once you know what you're doing, but they should serve as a guide
-    for when you are first encountering a few different constructs in your Neovim config.
-
-If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now! :)
---]]
-
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -118,18 +30,6 @@ vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 --  See `:help 'clipboard'`
 
 vim.opt.clipboard = 'unnamedplus'
-vim.g.clipboard = {
-  name = 'xsel',
-  copy = {
-    ['+'] = 'xsel --clipboard --input',
-    ['*'] = 'xsel --primary --input',
-  },
-  paste = {
-    ['+'] = 'xsel --clipboard --output',
-    ['*'] = 'xsel --primary --output',
-  },
-  cache_enabled = 0,
-}
 -- vim.schedule(function()
 --   vim.o.clipboard = 'unnamedplus'
 --
@@ -179,7 +79,7 @@ vim.o.smartcase = true
 vim.o.signcolumn = 'yes'
 
 -- Decrease update time
-vim.o.updatetime = 250
+vim.o.updatetime = 450
 
 -- Decrease mapped sequence wait time
 vim.o.timeoutlen = 300
@@ -200,8 +100,17 @@ vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Set default tabstop and shiftwidth
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
+vim.opt.expandtab = true -- convert tabs to spaces
+vim.opt.tabstop = 4 -- number of spaces inserted for tab character
+vim.opt.softtabstop = 4 -- number of spaces inserted for the <Tab> key
+vim.opt.shiftwidth = 4 -- number of spaces inserted for each indentation level
+vim.opt.smartindent = true -- Insert indents automatically
+vim.opt.breakindent = true -- enable line breaking indentation
+
+-- Disable line wrapping
+vim.opt.wrap = false
+
+-- vim.opt.writebackup = false -- prevent editing of files being edited elsewhere
 
 -- Force terminal capabilities
 vim.opt.termguicolors = true
@@ -227,75 +136,10 @@ vim.o.scrolloff = 8
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
--- [[ Basic Keymaps ]]
---  See `:help vim.keymap.set()`
-
--- Clear highlights on search when pressing <Esc> in normal mode
---  See `:help hlsearch`
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
--- Diagnostic keymaps
-vim.keymap.set('n', 'gQ', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-vim.keymap.set('n', 'ge', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror' })
-
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
--- Navigate buffers
--- vim.keymap.set({ 'n', 'v' }, '<C-h>', ':bp<CR>', { desc = 'Previous buffer', silent = true })
--- vim.keymap.set({ 'n', 'v' }, '<C-æ>', ':bn<CR>', { desc = 'Next buffer', silent = true })
-vim.keymap.set({ 'n', 'v' }, '<C-q>', ':bdelete<CR>', { desc = 'Close buffer', silent = true })
-
--- Keep visual selection after indenting
-vim.keymap.set('v', '<', '<gv', { desc = 'Indent left and stay in visual mode' })
-vim.keymap.set('v', '>', '>gv', { desc = 'Indent right and stay in visual mode' })
-
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
--- Remap pasting in command line mode
-vim.keymap.set('c', '<C-p>', '<C-r>+', { desc = 'Paste in command line mode' })
-
---  See `:help wincmd` for a list of all window commands
--- vim.keymap.set('n', '<C-M-j>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
--- vim.keymap.set('n', '<C-M-ø>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
--- vim.keymap.set('n', '<C-M-k>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
--- vim.keymap.set('n', '<C-M-l>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
-vim.keymap.set({ 'n', 'v' }, '<C-w>J', '<C-W>H', { desc = 'Move window to the far left' })
-vim.keymap.set({ 'n', 'v' }, '<C-w>K', '<C-W>J', { desc = 'Move window to the bottom' })
-vim.keymap.set({ 'n', 'v' }, '<C-w>L', '<C-W>K', { desc = 'Move window to the top' })
-vim.keymap.set({ 'n', 'v' }, '<C-w>Ø', '<C-W>L', { desc = 'Move window to the far right' })
-
-vim.keymap.set({ 'n', 'v' }, '<C-h>', '<C-W>v', { desc = 'Split window vertically' })
-vim.keymap.set({ 'n', 'v' }, '<F48>', '<C-W>s', { desc = 'Split window horisontally' })
-vim.keymap.set({ 'n', 'v' }, '<C-q>', '<C-W>q', { desc = 'Quit window' })
-
--- Remap movement keys
-vim.keymap.set({ 'n', 'v' }, 'j', 'h', { noremap = true })
-vim.keymap.set({ 'n', 'v' }, 'k', 'j', { noremap = true })
-vim.keymap.set({ 'n', 'v' }, 'l', 'k', { noremap = true })
-vim.keymap.set({ 'n', 'v' }, 'ø', 'l', { noremap = true })
-
--- Remap moving to first nonwhite character in the line, and jumping to end of line
-vim.keymap.set({ 'n', 'v', 'o' }, 'h', '^', { noremap = true })
-vim.keymap.set({ 'n', 'v', 'o' }, 'æ', '$', { noremap = true })
-
--- Remap moving through jumlist history
-vim.keymap.set({ 'n', 'v' }, '<M-j>', '<C-o>', { noremap = true })
-vim.keymap.set({ 'n', 'v' }, '<M-ø>', '<C-i>', { noremap = true })
-
--- Neogit & fugitive
--- local neogit = require('neogit')
-vim.keymap.set('n', '<leader>gB', ':G blame<CR>', { silent = true, noremap = true })
+-- Import keymaps
+require 'custom.keymaps'
+-- Import java file creation integration
+require 'custom.mini-files-java-integration'
 
 -- Set GitSigns colors
 vim.api.nvim_set_hl(0, 'GitSignsAdd', { fg = '#00ff00', bg = 'NONE' }) -- Bright green for additions
@@ -347,6 +191,13 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   end
 end
 
+-- Force no wrap. Without it some panes open with wrap
+vim.api.nvim_create_autocmd('WinNew', {
+  callback = function()
+    vim.opt_local.wrap = false
+  end,
+})
+
 ---@type vim.Option
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
@@ -371,19 +222,7 @@ require('lazy').setup({
   -- keys can be used to configure plugin behavior/loading/etc.
   --
   -- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
-  --
 
-  -- Alternatively, use `config = function() ... end` for full control over the configuration.
-  -- If you prefer to call `setup` explicitly, use:
-  --    {
-  --        'lewis6991/gitsigns.nvim',
-  --        config = function()
-  --            require('gitsigns').setup({
-  --                -- Your gitsigns configuration here
-  --            })
-  --        end,
-  --    }
-  --
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`.
   --
@@ -856,6 +695,9 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         bashls = {},
+        dockerls = {},
+        yamlls = {},
+        docker_compose_language_service = {},
         ts_ls = {
           settings = {
             typescript = {
@@ -889,7 +731,9 @@ require('lazy').setup({
                 callSnippet = 'Replace',
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+              diagnostics = {
+                disable = { 'missing-fields', 'undefined-global', 'undefined-field' },
+              },
             },
           },
         },
@@ -973,6 +817,9 @@ require('lazy').setup({
         json = { 'prettier' },
         yaml = { 'prettier' },
         markdown = { 'prettier' },
+        sql = { 'sqlfluff' },
+        -- For java use xml files extracted from intellij
+        -- java = { 'google-java-format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -1116,90 +963,16 @@ require('lazy').setup({
     },
   },
 
-  -- { -- You can easily change to a different colorscheme.
-  --   -- Change the name of the colorscheme plugin below, and then
-  --   -- change the command in the config to whatever the name of that colorscheme is.
-  --   --
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   config = function()
-  --     ---@diagnostic disable-next-line: missing-fields
-  --     require('tokyonight').setup {
-  --       styles = {
-  --         comments = { italic = false }, -- Disable italics in comments
-  --       },
-  --     }
-  --
-  --     -- Load the colorscheme here.
-  --     -- Like many other themes, this one has different styles, and you could load
-  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  --     vim.cmd.colorscheme 'tokyonight-night'
-  --   end,
-  -- },
-
-  -- {
-  --   'loctvl842/monokai-pro.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   config = function()
-  --     ---@diagnostic disable-next-line: missing-fields
-  --     require('monokai-pro').setup {
-  --       styles = {
-  --         comments = { italic = false }, -- Disable italics in comments
-  --       },
-  --       overrideScheme = function(cs, p, config, hp)
-  --         local cs_override = {}
-  --         local calc_bg = hp.blend(p.background, 0.75, '#000000')
-  --
-  --         cs_override.editor = {
-  --           background = calc_bg,
-  --         }
-  --         return cs_override
-  --       end,
-  --     }
-  --     vim.cmd.colorscheme 'monokai-pro'
-  --   end,
-  -- },
-
   {
-    'rebelot/kanagawa.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('kanagawa').setup {
-        undercurl = true,
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-        overrides = function(colors) -- add/modify highlights
-          return {
-            Normal = { bg = '#000000' },
-            NormalNC = { bg = '#000000' },
-            NormalFloat = { bg = '#000000' },
-            SignColumn = { bg = '#000000' },
-            LineNr = { bg = '#000000' }, -- line numbers background
-            GitSignsAdd = { bg = '#000000' },
-            GitSignsChange = { bg = '#000000' },
-            GitSignsDelete = { bg = '#000000' },
-            GitSignsChangeDelete = { bg = '#000000' },
-            GitSignsTopDelete = { bg = '#000000' },
-            -- DiagnosticUnderlineError = {
-            --   undercurl = true,
-            --   sp = '#FF0000', -- or colors.palette.peachRed
-            -- },
-            -- DiagnosticUnderlineWarn = {
-            --   undercurl = true,
-            --   sp = '#FFA500', -- or colors.palette.boatYellow2
-            -- },
-          }
-        end,
-        theme = 'wave', -- Load "wave" theme
-        background = { -- map the value of 'background' option to a theme
-          dark = 'wave', -- try "dragon" !
-        },
-      }
-      vim.cmd.colorscheme 'kanagawa'
-    end,
+    'ellisonleao/gruvbox.nvim',
+    priority = 1000,
+    config = true,
+    opts = {
+      palette_overrides = {
+        dark0_hard = '#252525',
+      },
+      contrast = 'hard',
+    },
   },
 
   -- Highlight todo, notes, etc in comments
@@ -1247,7 +1020,9 @@ require('lazy').setup({
         },
       }
 
-      require('mini.icons').setup {}
+      require('mini.icons').setup {
+        mock_nvim_web_devicons = true,
+      }
 
       require('mini.files').setup {
         mappings = {
@@ -1268,24 +1043,6 @@ require('lazy').setup({
       vim.keymap.set('n', '-', function()
         require('mini.files').open(vim.api.nvim_buf_get_name(0))
       end, { desc = 'Open mini.files (current file)' })
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
   { -- Highlight, edit, and navigate code
@@ -1333,20 +1090,10 @@ require('lazy').setup({
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
-  -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
-  -- init.lua. If you want these files, they are in the repository, so you can just download them and
-  -- place them in the correct locations.
-
-  -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
-  --
   --  Here are some example plugins that I've included in the Kickstart repository.
-  --  Uncomment any of the lines below to enable them (you will need to restart nvim).
-  --
-  -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -1381,5 +1128,27 @@ require('lazy').setup({
   },
 })
 
+vim.o.background = 'dark'
+vim.cmd [[colorscheme gruvbox]]
+-- Adjust treesitter highlight for the gruvbox theme
+local class_blue = '#8ec07c' -- A muted, reader-friendly blue
+local groups = {
+  '@type', -- Class names and general types
+  '@constructor', -- 'new ClassName' calls
+  '@type.builtin', -- int, double, etc. (Keep if you want them blue too)
+  '@lsp.type.class', -- Semantic tokens from JDTLS
+  '@lsp.type.interface',
+}
+
+for _, group in ipairs(groups) do
+  vim.api.nvim_set_hl(0, group, { fg = class_blue, bold = true, force = true })
+end
+
+-- Change lsp highlighting color so it is not
+vim.api.nvim_set_hl(0, 'LspReferenceText', { bg = '#4a4a4a', underline = true })
+vim.api.nvim_set_hl(0, 'LspReferenceRead', { bg = '#4a4a4a', underline = true })
+vim.api.nvim_set_hl(0, 'LspReferenceWrite', { bg = '#4a4a4a', underline = true })
+
+-- vim.api.nvim_set_hl(0, "@variable.member", { fg = "#83a598", bold = false })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
