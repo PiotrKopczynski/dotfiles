@@ -24,6 +24,7 @@ return {
       -- input = { enabled = true },
       picker = {
         enabled = true,
+        hidden = true,
         -- Styling it to look like a modern dropdown
         layout = 'telescope',
         win = {
@@ -44,6 +45,7 @@ return {
               ['q'] = { 'close', mode = { 'n' } },
               ['<Esc>'] = { 'stopinsert', mode = { 'i' } },
               ['<Esc>'] = { 'close', mode = { 'n' } },
+              ['<C-q>'] = { 'bufdelete', mode = { 'n' } },
             },
           },
         },

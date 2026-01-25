@@ -9,6 +9,7 @@ return {
         markdown = { 'markdownlint' },
         dockerfile = { 'hadolint' },
         json = { 'jsonlint' },
+        yaml = { 'yamllint' },
       }
 
       -- Customize markdownlint to ignore MD013 (Line Length)

@@ -47,4 +47,8 @@ return {
       },
     },
   },
+  -- Customize the highlight groups
+  vim.api.nvim_set_hl(0, 'FlashCurrent', { bg = '#ff0000', fg = '#ffffff', bold = true }),
+  vim.api.nvim_set_hl(0, 'FlashLabel', { bg = '#ffff00', fg = '#ff0000', bold = true }),
+  vim.api.nvim_set_hl(0, 'FlashMatch', { fg = '#ff0000' }),
 }
