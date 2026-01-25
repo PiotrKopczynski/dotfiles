@@ -1,0 +1,10 @@
+{
+    "diagnostics.globals": [
+        "vim",
+        "create_java_class"
+    ],
+    "diagnostics.disable": [
+        "duplicate-index",
+        "missing-fields"
+    ]
+}

@@ -22,7 +22,7 @@ vim.o.mouse = 'a'
 vim.o.showmode = false
 
 -- Define what is stored in sessions
-vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions'
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -190,6 +190,14 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     error('Error cloning lazy.nvim:\n' .. out)
   end
 end
+
+-- Correct way of attaching jdtls
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'java',
+  callback = function(args)
+    require('custom.jdtls.jdtls_setup').setup()
+  end,
+})
 
 -- Force no wrap. Without it some panes open with wrap
 vim.api.nvim_create_autocmd('WinNew', {
@@ -544,6 +552,13 @@ require('lazy').setup({
             client.handlers['$/progress'] = function() end
           end
 
+          if client and client.name == 'jdtls' then
+            map('<leader>jo', require('jdtls').organize_imports, '[J]ava [O]rganize Imports')
+            map('<leader>jv', require('jdtls').extract_variable, '[J]ava Extract [V]ariable', { 'n', 'x' })
+            map('<leader>jc', require('jdtls').extract_constant, '[J]ava Extract [C]onstant', { 'n', 'x' })
+            map('<leader>jm', require('jdtls').extract_method, '[J]ava Extract [M]ethod', 'x')
+          end
+
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
           map('gR', vim.lsp.buf.rename, '[R]e[n]ame')
@@ -714,6 +729,7 @@ require('lazy').setup({
         emmet_language_server = {}, -- LSP for jsx and tsx
         marksman = {}, --Markdown LSP
         ltex = {},
+        jdtls = {},
         -- eslint = {
         --   settings = {
         --     workingDirectory = { mode = 'auto' },
@@ -759,6 +775,11 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        automatic_enable = {
+          exclude = {
+            'jdtls',
+          },
+        },
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
         handlers = {
@@ -795,7 +816,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, java = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -1070,6 +1091,7 @@ require('lazy').setup({
         'json5',
         'css',
         'scss',
+        'java',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -1080,7 +1102,7 @@ require('lazy').setup({
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true, disable = { 'ruby', 'java' } },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
