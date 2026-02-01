@@ -3,7 +3,7 @@
 # NOTES FOR ADDITIONAL INSTALLATIONS
 # Download a nerdfont through nerdfonts.com/font-downloads (UbuntuMono Nerd Font or try Jetbrains)
 # Install Bazecor from Dygma
-# Install Karabiner-Elements
+# Install Karabiner-Elements and find a way to represent æ and ø as ctrl + alt + F12 and ctrl + alt + F11
 # Install Aerospace
 # Install neovim from: https://github.com/neovim/neovim/releases/tag/stable
 # Remember to correctly alias neovim to vi

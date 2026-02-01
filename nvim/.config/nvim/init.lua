@@ -107,6 +107,9 @@ vim.opt.shiftwidth = 4 -- number of spaces inserted for each indentation level
 vim.opt.smartindent = true -- Insert indents automatically
 vim.opt.breakindent = true -- enable line breaking indentation
 
+-- Disable swap files
+vim.opt.swapfile = false
+
 -- Disable line wrapping
 vim.opt.wrap = false
 
@@ -552,13 +555,6 @@ require('lazy').setup({
             client.handlers['$/progress'] = function() end
           end
 
-          if client and client.name == 'jdtls' then
-            map('<leader>jo', require('jdtls').organize_imports, '[J]ava [O]rganize Imports')
-            map('<leader>jv', require('jdtls').extract_variable, '[J]ava Extract [V]ariable', { 'n', 'x' })
-            map('<leader>jc', require('jdtls').extract_constant, '[J]ava Extract [C]onstant', { 'n', 'x' })
-            map('<leader>jm', require('jdtls').extract_method, '[J]ava Extract [M]ethod', 'x')
-          end
-
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
           map('gR', vim.lsp.buf.rename, '[R]e[n]ame')
@@ -698,6 +694,11 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+
+      -- Find the path to any installed JDK 21 in SDKMAN
+      -- local sdkman_java_21 = vim.fn.glob(vim.fn.expand '~/.sdkman/candidates/java/21*', true, true)[1]
+      -- Fallback to system java if SDKMAN 21 isn't found
+      -- local java_binary = (sdkman_java_21 and sdkman_java_21 .. '/bin/java') or 'java'
       local servers = {
         -- clangd = {},
         -- gopls = {},
@@ -709,9 +710,30 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
+        postgres_lsp = {
+          settings = {
+            postgres_lsp = {
+              keywordCase = 'lowercase',
+            },
+          },
+        },
+        jsonls = {},
         bashls = {},
         dockerls = {},
         yamlls = {},
+        lemminx = { -- XML lsp
+          settings = {
+            xml = {
+              format = {
+                enabled = true,
+                splitAttributes = true,
+              },
+              completion = {
+                autoCloseTags = true,
+              },
+            },
+          },
+        },
         docker_compose_language_service = {},
         ts_ls = {
           settings = {
@@ -730,6 +752,19 @@ require('lazy').setup({
         marksman = {}, --Markdown LSP
         ltex = {},
         jdtls = {},
+        kotlin_language_server = {
+          root_dir = require('lspconfig').util.root_pattern('settings.gradle', 'settings.gradle.kts', 'build.gradle', 'build.gradle.kts', 'pom.xml', '.git'),
+          settings = {
+            kotlin = {
+              compiler = {
+                jvm = {
+                  target = '21',
+                },
+              },
+            },
+          },
+        },
+        -- kotlin_lsp = {}, --try this one in the future. For now it is pretty bad
         -- eslint = {
         --   settings = {
         --     workingDirectory = { mode = 'auto' },
@@ -836,9 +871,11 @@ require('lazy').setup({
         typescript = { 'prettier' },
         typescriptreact = { 'prettier' },
         json = { 'prettier' },
+        jsonc = { 'prettier' },
         yaml = { 'prettier' },
         markdown = { 'prettier' },
         sql = { 'sqlfluff' },
+        kotlin = { 'ktlint' },
         -- For java use xml files extracted from intellij
         -- java = { 'google-java-format' },
         -- Conform can also run multiple formatters sequentially
@@ -1088,10 +1125,13 @@ require('lazy').setup({
         'typescript',
         'tsx',
         'json',
+        'jsonc',
         'json5',
         'css',
         'scss',
         'java',
+        'kotlin',
+        'sql',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -1170,6 +1210,9 @@ end
 vim.api.nvim_set_hl(0, 'LspReferenceText', { bg = '#4a4a4a', underline = true })
 vim.api.nvim_set_hl(0, 'LspReferenceRead', { bg = '#4a4a4a', underline = true })
 vim.api.nvim_set_hl(0, 'LspReferenceWrite', { bg = '#4a4a4a', underline = true })
+
+-- Mute lsp progress notifications
+vim.lsp.handlers['$/progress'] = function() end
 
 -- vim.api.nvim_set_hl(0, "@variable.member", { fg = "#83a598", bold = false })
 -- The line beneath this is called `modeline`. See `:help modeline`

@@ -114,11 +114,19 @@ return {
         desc = '[S]earch current [W]ord',
       },
       {
-        '<leader>sd',
+        '<leader>sD',
         function()
           Snacks.picker.diagnostics()
         end,
         desc = '[S]earch [D]iagnostics',
+      },
+      {
+        '<leader>sd',
+        function()
+          -- buf = 0 refers to the current buffer
+          Snacks.picker.diagnostics { filter = { buf = 0 } }
+        end,
+        desc = 'Buffer Diagnostics',
       },
       {
         '<leader>sh',

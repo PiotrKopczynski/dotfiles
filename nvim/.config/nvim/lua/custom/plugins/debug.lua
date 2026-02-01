@@ -45,6 +45,8 @@ return {
         },
       }
 
+      dap.configurations.kotlin = dap.configurations.java
+
       -- Define the sign for breakpoints
       vim.fn.sign_define('DapBreakpoint', {
         text = '●',
