@@ -1103,13 +1103,71 @@ require('lazy').setup({
       end, { desc = 'Open mini.files (current file)' })
     end,
   },
+  -- { -- Highlight, edit, and navigate code
+  --   'nvim-treesitter/nvim-treesitter',
+  --   build = ':TSUpdate',
+  --   -- main = 'nvim-treesitter', -- Sets main module to use for opts
+  --   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+  --   opts = {
+  --     ensure_installed = {
+  --       'bash',
+  --       'c',
+  --       'diff',
+  --       'html',
+  --       'lua',
+  --       'luadoc',
+  --       'markdown',
+  --       'markdown_inline',
+  --       'query',
+  --       'vim',
+  --       'vimdoc',
+  --       'javascript',
+  --       'typescript',
+  --       'tsx',
+  --       'json',
+  --       'jsonc',
+  --       'json5',
+  --       'css',
+  --       'scss',
+  --       'java',
+  --       'kotlin',
+  --       'sql',
+  --     },
+  --     -- Autoinstall languages that are not installed
+  --     auto_install = true,
+  --     -- highlight = {
+  --     --   enable = true,
+  --     --   -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+  --     --   --  If you are experiencing weird indenting issues, add the language to
+  --     --   --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+  --     --   additional_vim_regex_highlighting = { 'ruby' },
+  --     -- },
+  --     indent = { enable = true, disable = { 'ruby', 'java' } },
+  --   },
+  --   config = function(_, opts)
+  --     require('nvim-treesitter').setup(opts)
+  --
+  --     -- Enable treesitter-based highlighting for all buffers
+  --     vim.api.nvim_create_autocmd('FileType', {
+  --       callback = function(args)
+  --         pcall(vim.treesitter.start, args.buf)
+  --       end,
+  --     })
+  --   end,
+  --   -- There are additional nvim-treesitter modules that you can use to interact
+  --   -- with nvim-treesitter. You should go explore a few and see what interests you:
+  --   --
+  --   --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+  --   --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+  --   --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  -- },
+
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = {
+    -- lazy = false,
+    -- build = ':TSUpdate',
+    config = function()
+      local filetypes = {
         'bash',
         'c',
         'diff',
@@ -1132,24 +1190,30 @@ require('lazy').setup({
         'java',
         'kotlin',
         'sql',
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby', 'java' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+      }
+      require('nvim-treesitter').install(filetypes)
+      -- local filetypes_set = {}
+      -- for _, ft in ipairs(filetypes) do
+      --   filetypes_set[ft] = true
+      -- end
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = filetypes,
+        callback = function()
+          vim.treesitter.start()
+        end,
+        -- callback = function(args)
+        --   vim.treesitter.start(args.buf)
+        -- end,
+      })
+      -- vim.api.nvim_create_autocmd('BufEnter', {
+      --   callback = function(args)
+      --     local ft = vim.bo[args.buf].filetype
+      --     if filetypes_set[ft] and not vim.b[args.buf].ts_highlight then
+      --       pcall(vim.treesitter.start, args.buf)
+      --     end
+      --   end,
+      -- })
+    end,
   },
 
   --  Here are some example plugins that I've included in the Kickstart repository.

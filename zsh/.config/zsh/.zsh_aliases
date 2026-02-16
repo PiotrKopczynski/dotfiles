@@ -33,6 +33,8 @@ alias gap='git add -p'
 alias gr='git rebase'
 alias gre='git reset'
 
+alias vi='nvim'
+
 # Dirs
 alias ..="cd .."
 alias ...="cd ../.."
@@ -58,15 +60,17 @@ alias tc='clear; tmux clear-history; clear'
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-
 function t() {
   {
     exec </dev/tty
     exec <&1
 
+    local sesh_bin
+    sesh_bin=$(which sesh)
+
     local session
     FZF_DEFAULT_OPTS=""
-    session=$(sesh list -t -c | fzf --no-preview --preview-window=hidden --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  ')
+    session=$($sesh_bin list -t -c -z | fzf --no-preview --preview-window=hidden --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  ')
     [[ -z "$session" ]] && return
     # If tmux is running on my private pc, update the server's environment to make sure tmux uses the system clipboard
     if [[ $(hostname) == "Stacey" ]]; then
@@ -85,7 +89,7 @@ function t() {
         esac
       done
     fi
-    sesh connect $session
+    $sesh_bin connect $session
   }
 }
 

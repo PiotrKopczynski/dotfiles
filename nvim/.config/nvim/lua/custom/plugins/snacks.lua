@@ -23,6 +23,7 @@ return {
       -- indent = { enabled = true },
       -- input = { enabled = true },
       picker = {
+        ui_select = true, -- Enable vim.ui.select replacement
         enabled = true,
         hidden = true,
         -- Styling it to look like a modern dropdown

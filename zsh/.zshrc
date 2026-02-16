@@ -52,9 +52,9 @@ source $HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source $HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
 # Give the fzf window a border and some padding
-zstyle ':fzf-tab:*' fzf-flags --bind=tab:accept --preview-window=right:50%:rounded --color=16 --border=rounded --query=''
-zstyle ':fzf-tab:*' fzf-min-height 40
-zstyle ':fzf-tab:*' popup-min-size 130 40
+zstyle ':fzf-tab:*' fzf-flags --bind=tab:accept --preview-window=right:50%:rounded --color=16 --border=rounded --height=100% --query=''
+zstyle ':fzf-tab:*' fzf-min-height 20
+zstyle ':fzf-tab:*' popup-min-size 120 20
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:complete:eza:*' fzf-preview 'eza -1 --color=always $realpath'
@@ -154,6 +154,14 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 source $HOME/.zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 eval "$(zoxide init zsh)"
-. "$HOME/.atuin/bin/env"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    . "$HOME/.atuin/bin"
+    export JAVA_HOME=$(/usr/libexec/java_home -v 21) # needed for maven to use java 21
+    export PATH=$JAVA_HOME/bin:$PATH
+    # Set spring boot dev profile locally
+    export SPRING_PROFILES_ACTIVE=dev
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    . "$HOME/.atuin/bin/env"
+fi
 eval "$(atuin init zsh)"
 eval "$(starship init zsh)"

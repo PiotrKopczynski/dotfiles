@@ -1,11 +1,16 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # Ensure the PATH is set so tmux and fzf-tmux are found
-export PATH="$HOME/go/bin:$HOME/.fzf/bin:$HOME/.local/bin:/usr/bin:/bin"
+export PATH="$HOME/go/bin:$HOME/.fzf/bin:$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 # Ensure we have the current tmux socket and path
 export TMUX_PANE_CURRENT="$TMUX_PANE"
 
-SESH_BIN="$HOME/go/bin/sesh"
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    SESH_BIN="$HOME/go/bin/sesh"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    SESH_BIN="/opt/homebrew/bin/sesh"
+fi
+
 
 session=$($SESH_BIN list --icons | fzf-tmux --no-preview -p 80%,70% \
     --no-sort --ansi --border-label " sesh " --prompt '⚡  ' \
