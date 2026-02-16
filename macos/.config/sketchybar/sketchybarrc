@@ -1,0 +1,134 @@
+#!/usr/bin/env sh
+
+source "$HOME/.config/sketchybar/colors.sh" # Loads all defined colors
+# source "$HOME/.config/sketchybar/icons.sh" # Loads all defined icons
+
+# ITEM_DIR="$HOME/.config/sketchybar/items" # Directory where the items are configured
+PLUGIN_DIR="$HOME/.config/sketchybar/plugins" # Directory where all the plugin scripts are stored
+
+FONT="UbuntuMono Nerd Font" # Needs to have Regular, Bold, Semibold, Heavy and Black variants
+# SPACE_CLICK_SCRIPT="yabai -m space --focus \$SID 2>/dev/null" # The script that is run for clicking on space components
+
+PADDINGS=3 # All paddings use this value (icon, label, background)
+
+POPUP_BORDER_WIDTH=2
+POPUP_CORNER_RADIUS=11
+
+SHADOW=on
+
+# Setting up the general bar appearance and default values
+sketchybar --bar     height=25                                         \
+                     color=$BAR_COLOR                                  \
+                     shadow=$SHADOW                                    \
+                     position=bottom                                     \
+                     sticky=on                                         \
+                     padding_right=0                                  \
+                     padding_left=0                                   \
+                     corner_radius=0                                   \
+                     y_offset=0                                       \
+                     margin=0                                        \
+                     blur_radius=20                                    \
+                                                                       \
+           --default updates=on                                \
+                     icon.font="$FONT:Bold:14.0"                       \
+                     icon.color=$ICON_COLOR                            \
+                     icon.padding_left=$PADDINGS                       \
+                     icon.padding_right=$PADDINGS                      \
+                     label.font="$FONT:Semibold:13.0"                  \
+                     label.color=$LABEL_COLOR                          \
+                     label.padding_left=$PADDINGS                      \
+                     label.padding_right=$PADDINGS                     \
+                     background.padding_right=$PADDINGS                \
+                     background.padding_left=$PADDINGS                 \
+                     popup.background.border_width=2                   \
+                     popup.background.corner_radius=11                 \
+                     popup.background.border_color=$POPUP_BORDER_COLOR \
+                     popup.background.color=$POPUP_BACKGROUND_COLOR    \
+                     popup.background.shadow.drawing=$SHADOW
+
+sketchybar --add event aerospace_workspace_change
+for sid in $(aerospace list-workspaces --all); do
+    sketchybar --add item space."$sid" left \
+        --subscribe space."$sid" aerospace_workspace_change \
+        --set space."$sid" \
+        display=all \
+        background.color=0x44ffffff \
+        background.corner_radius=5 \
+        background.height=20 \
+        background.drawing=off \
+        label.font.size=14.0 \
+        label="$sid" \
+        click_script="aerospace workspace $sid" \
+        script="$HOME/.config/sketchybar/plugins/aerospacer.sh $sid"
+done
+
+CONFIG_DIR="$HOME/.config/sketchybar"
+MONITOR_COUNT=$(aerospace list-monitors | wc -l)
+HOME_MONITOR="Odyssey G50A"
+IS_HOME_SETUP=$(aerospace list-monitors --format '%{monitor-name}' | grep -c "$HOME_MONITOR")
+# Set indices based on which setup is detected
+if [ "$IS_HOME_SETUP" -gt 0 ]; then
+  # Home setup indices
+  LEFT_IDX=1
+  MIDDLE_IDX=0
+else
+  # Other setup indices (swapped)
+  LEFT_IDX=0
+  MIDDLE_IDX=1
+fi
+
+# Get the Sketchybar ids in order AeroSpace ranks them (left-to-right)
+MONITORS=($(aerospace list-monitors --format '%{monitor-appkit-nsscreen-screens-id}'))
+
+# --- Workspace 1-5 ---
+for sid in {1..5}; do
+  # If 3 monitors, put on display 2. Otherwise, put on display 1.
+  [ $MONITOR_COUNT -eq 3 ] && TARGET_DISPLAY=${MONITORS[MIDDLE_IDX]} || TARGET_DISPLAY=1
+  
+  sketchybar --add item space.$sid left \
+    --set space.$sid display=$TARGET_DISPLAY \
+                     label="$sid" \
+                     script="$PLUGIN_DIR/aerospace.sh $sid" \
+                     --subscribe space.$sid aerospace_workspace_change
+done
+
+# --- Workspace 6-8 ---
+for sid in {6..8}; do
+  # If 3 monitors, put on display 3. Otherwise, put on display 1.
+  [ $MONITOR_COUNT -eq 3 ] && TARGET_DISPLAY=${MONITORS[LEFT_IDX]} || TARGET_DISPLAY=1
+  
+  sketchybar --add item space.$sid left \
+    --set space.$sid display=$TARGET_DISPLAY \
+                     label="$sid" \
+                     script="$PLUGIN_DIR/aerospace.sh $sid" \
+                     --subscribe space.$sid aerospace_workspace_change
+done
+
+# --- Workspace 9-10 ---
+for sid in {9..10}; do
+
+  [ $MONITOR_COUNT -eq 3 ] && TARGET_DISPLAY=${MONITORS[2]} || TARGET_DISPLAY=1
+  sketchybar --add item space.$sid left \
+    --set space.$sid display=$TARGET_DISPLAY \
+                     label="$sid" \
+                     script="$PLUGIN_DIR/aerospace.sh $sid" \
+                     --subscribe space.$sid aerospace_workspace_change
+done
+
+# --- Clock ---
+sketchybar --add item clock right \
+           --set clock \
+                 update_freq=10 \
+                 icon="󱑂" \
+                 script="sketchybar --set \$NAME label=\"\$(date '+%H:%M')\""
+
+# --- Battery ---
+# Note: This uses a simple inline script for now to ensure it appears.
+sketchybar --add item battery right \
+           --set battery \
+                 update_freq=60 \
+                 icon="" \
+                 script="sketchybar --set \$NAME label=\"\$(pmset -g batt | grep -Eo '[0-9]+%')\"" \
+           --subscribe battery system_woke power_source_change
+
+sketchybar --update
