@@ -963,7 +963,7 @@ require('lazy').setup({
             local line = vim.api.nvim_get_current_line()
             local char = line:sub(col, col)
 
-            if char:match '[%)%]%}"\'>]' then
+            if char:match '[%)%]%}"\'>%`´]' then
               -- Move cursor right to jump out
               vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Right>', true, true, true), 'n', true)
               return true
@@ -996,6 +996,9 @@ require('lazy').setup({
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        list = {
+          selection = { preselect = false, auto_insert = false },
+        },
       },
 
       sources = {
