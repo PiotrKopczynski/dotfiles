@@ -8,6 +8,11 @@ return {
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
+      scratch = {
+        -- your scratch configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      },
       bigfile = { enabled = true },
       dashboard = {
         enabled = true,
@@ -89,6 +94,29 @@ return {
       })
     end,
     keys = {
+      -- Scratch
+      {
+        '<leader>.',
+        function()
+          Snacks.scratch()
+        end,
+        desc = 'Toggle Scratch Buffer',
+      },
+      {
+        '<leader>ss',
+        function()
+          Snacks.scratch.select()
+        end,
+        desc = 'Select Scratch Buffer',
+      },
+      -- Named scratches for different purposes
+      {
+        '<leader>n',
+        function()
+          Snacks.scratch { name = 'notes', ft = 'markdown' }
+        end,
+        desc = 'Scratch: Notes',
+      },
       -- 5. THE KEYBINDINGS (Replicating your leader maps)
       {
         '<leader>sf',
