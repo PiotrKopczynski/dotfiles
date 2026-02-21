@@ -3,7 +3,7 @@ return {
     'nvim-treesitter/nvim-treesitter-textobjects',
     dependencies = { 'nvim-treesitter' },
     config = function()
-      require('nvim-treesitter').setup {
+      require('nvim-treesitter.configs').setup {
         textobjects = {
           move = {
             enable = true,
@@ -40,7 +40,7 @@ return {
         },
       }
 
-      local ts_repeat_move = require 'nvim-treesitter-textobjects.repeatable_move'
+      local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
 
       -- Repeat movement with ; and ,
       -- ensure ; goes forward and , goes backward regardless of the last direction
