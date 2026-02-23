@@ -1,0 +1,115 @@
+"Map leader key
+let mapleader = " "
+" Remap navigation
+noremap j h
+noremap k j
+noremap ø l
+noremap l k
+" Enable smooth scrolling
+set scrolloff=5
+" Remap undo to C-u which is a built-in mapping but I never use it
+nnoremap U <C-r>
+" First non-blank character at line
+noremap h ^
+" End if line
+noremap æ $
+" Indentation
+noremap < <<
+noremap > >>
+" disable automatic joining when using j
+set nojoinspaces
+" make y and p operations use the system clipboard and not the vim register
+set clipboard=unnamedplus
+" Turn on search highlighting
+set hlsearch
+" Navigate the history of where the cursor was
+map <M-j> :action Back<CR>
+map ö :action Forward<CR>
+"Other
+map gi :action GotoImplementation<CR>
+map gr :action ShowUsages<CR>
+map gR :action RenameElement<CR>
+map gd :action GotoDeclaration<CR>
+map ga :action ShowIntentionActions<CR>
+map gq :action QuickJavaDoc<CR>
+map gi :action GotoImplementation<CR>
+" make escape exit search
+nnoremap <Esc> :nohlsearch<CR><Esc>
+" Split current editor vertically
+nnoremap <C-h> :action SplitVertically<CR>
+" Split current editor horizontally
+nnoremap <C-S-F12> :action SplitHorizontally<CR> 
+"FOR THIS INSTALL THE Tab Shift PLUGIN IN INTELLIJ
+nnoremap <C-j> :action TabShiftActions.MoveFocusLeft<CR>
+nnoremap <C-k> :action TabShiftActions.MoveFocusDown<CR>
+nnoremap <C-l> :action TabShiftActions.MoveFocusUp<CR>
+nnoremap <C-S-F11> :action TabShiftActions.MoveFocusRight<CR>
+
+
+" FOR THIS INSTALL THE Fuzzier PLUGIN IN INTELLIJ
+" THIS ONE HAS AN ISSUE WITH DISPLAYING THE CORRECT COLORS IN THE PREVIEW
+"map <leader>sg :action com.mituuz.fuzzier.grep.FuzzyGrepCI<CR>
+" Find files - use Fuzzier for fuzzy file search with preview
+map <leader>sf :action com.mituuz.fuzzier.search.Fuzzier<CR>
+" Recent files - keep native
+nnoremap <leader><Space> :action RecentFiles<CR>
+
+" WITHOUT THE FUZZIER PLUGIN, USE THESE INSTEAD:
+" Open find in files
+map <Leader>sg :action FindInPath<CR>
+"" Open find files
+"map <Leader>sf :action GotoFile<CR> 
+
+
+" Create new files/directories
+" YOU NEED TO MAP THIS IN INTELLIJ FOR THIS TO WORK IN PROJECT VIEW
+map <M-n> :action NewElementInMenuGroup<CR>
+" Rename element in the project tree
+map <M-r> :action RenameElement<CR>
+" Delete BIND THIS ALSO IN INTELLIJ TO DELETE IN PROJECT VIEW
+map <M-d> :action Delete<CR>
+" Show errors
+nnoremap ge :action ShowErrorDescription<CR>
+" Map Leader + c to toggle comment in normal mode
+nmap gc :action CommentByLineComment<CR>
+" Map Leader + c to toggle comment in visual mode (selected block)
+vmap gc :action CommentByLineComment<CR>
+" Enable the surround plugin
+set surround
+" mini.surround style mappings
+nmap sa ys
+nmap sd ds
+nmap sr cs
+vmap sa S
+set textobj-user
+" Parentheses
+set textobj-parentheses
+" Braces {}
+set textobj-braces
+" Square brackets []
+set textobj-square
+" Quotes "" and ''
+set textobj-quotes
+" Set relative line numbers
+set relativenumber
+" Also set normal line numbering
+set number
+" Make search case insensitive by default, and become case sensitive only if you enter upper case letters
+set ignorecase
+set smartcase
+" Remap paste key for command mode
+cnoremap <C-p> <C-r>+
+" Close current tab
+map <C-q> :action CloseContent<CR>
+" Remap navigation to easier keys
+" enable the which-key plugin
+set which-key
+set notimeout
+" Show the package contents of the current class in the project tree GUI. Use this to mimic some of the oil-plugin functionality
+nnoremap - :action SelectIn<CR>
+
+" ////////////// NOTES /////////////////
+" Disable tabs in intellij Settings -> Editor ->  General -> Editor Tabs. There set Tab position to None and also limit the number of open tabs.
+" Allow changing the font size using the mousewheel in Editor -> General
+" Go to settings in the project window and change View Mode to -> Dock
+" Unpinned
