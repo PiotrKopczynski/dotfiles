@@ -160,6 +160,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     export PATH=$JAVA_HOME/bin:$PATH
     # Set spring boot dev profile locally
     export SPRING_PROFILES_ACTIVE=dev
+    export PATH=/opt/homebrew/opt/libpq/bin:$PATH
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     . "$HOME/.atuin/bin/env"
 fi

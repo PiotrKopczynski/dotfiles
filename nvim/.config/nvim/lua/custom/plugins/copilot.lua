@@ -7,7 +7,8 @@ return {
       require('copilot').setup {
         suggestion = {
           enabled = true,
-          auto_trigger = true,
+          auto_trigger = false,
+          -- debounce = 3000, Delay the suggestion
           keymap = {
             accept = '<M-CR>',
             accept_word = false,
