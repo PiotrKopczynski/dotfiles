@@ -69,12 +69,12 @@ IS_HOME_SETUP=$(aerospace list-monitors --format '%{monitor-name}' | grep -c "$H
 # Set indices based on which setup is detected
 if [ "$IS_HOME_SETUP" -gt 0 ]; then
   # Home setup indices
-  LEFT_IDX=1
-  MIDDLE_IDX=0
-else
-  # Other setup indices (swapped)
   LEFT_IDX=0
   MIDDLE_IDX=1
+else
+  # Other setup indices (swapped)
+  LEFT_IDX=1
+  MIDDLE_IDX=0
 fi
 
 # Get the Sketchybar ids in order AeroSpace ranks them (left-to-right)
