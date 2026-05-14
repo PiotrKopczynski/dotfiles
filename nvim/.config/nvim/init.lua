@@ -721,6 +721,8 @@ require('lazy').setup({
         bashls = {},
         dockerls = {},
         yamlls = {},
+        pyright = {}, -- Python lsp
+        ruff = {}, -- Python linter + formatter
         lemminx = { -- XML lsp
           settings = {
             xml = {
@@ -873,7 +875,7 @@ require('lazy').setup({
         -- For java use xml files extracted from intellij
         -- java = { 'google-java-format' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'ruff' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "oxlintd", "prettier", stop_after_first = true },

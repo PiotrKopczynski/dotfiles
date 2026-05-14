@@ -19,6 +19,10 @@
 # Autotiling for ubuntu
 # Install Obsidian for notes
 # Install OpenRGB if needed to control lights
+#
+#
+#NOTES FOR SWITCHING DISTROS:
+# for obsidian encryption install git-crypt gnupg, git-crypt unlock /path/to/key.key
 
 DOTFILES_DIR=$(pwd)
 OS="$(uname)"
