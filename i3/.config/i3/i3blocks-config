@@ -1,0 +1,25 @@
+separator_block_width=15
+markup=pango
+
+[cpu]
+label=
+command=grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage "%"}'
+interval=10
+
+[mem]
+label=
+command=free -h | awk '/^Mem:/ { print $3 "/" $2 }'
+interval=30
+
+[volume]
+command=~/.config/i3blocks/scripts/volume
+interval=1
+signal=10
+color=#b8bb26
+separator_block_width=10
+markup=pango
+
+[time]
+label=
+command=date '+%a %d %b %H:%M'
+interval=60
