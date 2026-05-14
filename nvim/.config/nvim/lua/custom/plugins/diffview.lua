@@ -2,6 +2,7 @@ return {
   {
     'sindrets/diffview.nvim',
     opts = {
+      enhanced_diff_hl = true,
       -- This section fixes the overlapping icons
       signs = {
         fold_closed = '> ',

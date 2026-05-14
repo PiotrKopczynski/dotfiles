@@ -32,7 +32,7 @@ return {
     },
     build = 'make tiktoken',
     opts = {
-      model = 'claude-opus-4.5',
+      model = 'claude-sonnet-4.6',
       prompts = {
         Explain = 'Explain how this code works.',
         Review = 'Review this code and suggest improvements.',

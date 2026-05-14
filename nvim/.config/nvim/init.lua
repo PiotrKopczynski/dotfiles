@@ -82,7 +82,7 @@ vim.o.signcolumn = 'yes'
 vim.o.updatetime = 450
 
 -- Decrease mapped sequence wait time
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = ur
 
 -- Configure how new splits should be opened
 vim.o.splitright = true
@@ -765,13 +765,7 @@ require('lazy').setup({
           },
         },
         -- kotlin_lsp = {}, --try this one in the future. For now it is pretty bad
-        -- eslint = {
-        --   settings = {
-        --     workingDirectory = { mode = 'auto' },
-        --     format = { enable = true },
-        --   },
-        --   root_dir = require('lspconfig.util').root_pattern('.eslintrc', '.eslintrc.js', '.eslintrc.json', 'package.json'),
-        -- },
+        oxlint = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -863,17 +857,17 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        html = { 'prettier' },
-        css = { 'prettier' },
-        scss = { 'prettier' },
-        javascript = { 'prettier' },
-        javascriptreact = { 'prettier' },
-        typescript = { 'prettier' },
-        typescriptreact = { 'prettier' },
-        json = { 'prettier' },
-        jsonc = { 'prettier' },
-        yaml = { 'prettier' },
-        markdown = { 'prettier' },
+        html = { 'oxfmt' },
+        css = { 'oxfmt' },
+        scss = { 'oxfmt' },
+        javascript = { 'oxfmt' },
+        javascriptreact = { 'oxfmt' },
+        typescript = { 'oxfmt' },
+        typescriptreact = { 'oxfmt' },
+        json = { 'oxfmt' },
+        jsonc = { 'oxfmt' },
+        yaml = { 'oxfmt' },
+        markdown = { 'oxfmt' },
         sql = { 'sqlfluff' },
         kotlin = { 'ktlint' },
         -- For java use xml files extracted from intellij
@@ -882,7 +876,7 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        -- javascript = { "oxlintd", "prettier", stop_after_first = true },
       },
     },
   },
