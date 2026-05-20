@@ -1,6 +1,4 @@
-return {
-  'mfussenegger/nvim-jdtls',
-  dependencies = {
-    'mfussenegger/nvim-dap',
-  },
+vim.pack.add {
+  'https://github.com/mfussenegger/nvim-dap',
+  'https://github.com/mfussenegger/nvim-jdtls',
 }

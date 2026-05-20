@@ -1,4 +1,3 @@
-# If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export PATH="$HOME/.atuin/bin:$PATH"
 
@@ -13,13 +12,10 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
 zstyle ':completion:*' menu select
-# zstyle ':completion:*' completer _expand _complete _ignored _file
-# set list-colors to enable filename colorizing
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # 1. Force hidden files globally for all completion attempts
 zstyle ':completion:*' show-hidden-files yes
 zstyle ':completion:*' all-files yes
-# zstyle ':completion:*:paths' extra-opts --glob '.*'
 
 # Carapace for showing command options
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
@@ -37,11 +33,10 @@ ZVM_VI_HIGHLIGHT_SELECTION=true
 # 1. Enable the built-in system clipboard integration
 export ZVM_SYSTEM_CLIPBOARD_ENABLED=true
 # 2. Tell it which tool to use (this avoids the logic in your current config)
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    # Use xclip (usually more stable than xsel for piping)
-ZVM_CLIPBOARD_COPY_CMD='xclip -selection clipboard'
-ZVM_CLIPBOARD_PASTE_CMD='xclip -selection clipboard -o'
-fi
+# if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+#     ZVM_CLIPBOARD_COPY_CMD='wl-copy'
+#     ZVM_CLIPBOARD_PASTE_CMD='wl-paste --no-newline'
+# fi
 # bindkey -v
 # Path to your custom vim-mode file
 ZVM_CONFIG="$HOME/.config/zsh/keybindings.zsh"
@@ -161,8 +156,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     # Set spring boot dev profile locally
     export SPRING_PROFILES_ACTIVE=dev
     export PATH=/opt/homebrew/opt/libpq/bin:$PATH
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    . "$HOME/.atuin/bin/env"
 fi
 eval "$(atuin init zsh)"
 eval "$(starship init zsh)"

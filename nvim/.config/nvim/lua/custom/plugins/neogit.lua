@@ -1,66 +1,50 @@
-return {
-  {
-    'NeogitOrg/neogit',
-    dependencies = {
-      'nvim-lua/plenary.nvim', -- required
-      'sindrets/diffview.nvim', -- optional - Diff integration
+vim.pack.add {
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/sindrets/diffview.nvim',
+  'https://github.com/folke/snacks.nvim',
+  'https://github.com/NeogitOrg/neogit',
+}
 
-      -- Only one of these is needed.
-      -- 'nvim-telescope/telescope.nvim', -- optional
-      -- 'ibhagwan/fzf-lua', -- optional
-      -- 'nvim-mini/mini.pick', -- optional
-      'folke/snacks.nvim', -- optional
+require('neogit').setup {
+  auto_refresh = true,
+  auto_close_console = false,
+  auto_show_console = false,
+  integrations = {
+    diffview = true,
+    snacks = true,
+  },
+  mappings = {
+    status = {
+      ['k'] = 'MoveDown',
+      ['l'] = 'MoveUp',
+      ['j'] = false,
     },
-    keys = {
-      {
-        '<leader>gg',
-        function()
-          require('neogit').open { kind = 'floating' }
-        end,
-        desc = 'Open Neogit',
-      },
+    popup = {
+      ['l'] = false,
+      ['j'] = 'LogPopup',
     },
-    config = function()
-      local neogit = require 'neogit'
-      neogit.setup {
-        auto_refresh = true,
-        auto_close_console = false,
-        auto_show_console = false,
-        integrations = {
-          diffview = true,
-          snacks = true,
-        },
-        mappings = {
-          status = {
-            ['k'] = 'MoveDown',
-            ['l'] = 'MoveUp',
-            ['j'] = false,
-          },
-          popup = {
-            ['l'] = false,
-            ['j'] = 'LogPopup',
-          },
-        },
-        popup = {
-          kind = 'floating',
-        },
-        stash = {
-          kind = 'floating',
-        },
-        commit_editor = {
-          kind = 'floating',
-          staged_diff_split_kind = 'auto',
-        },
-        commit_view = {
-          kind = 'floating',
-        },
-        preview_buffer = {
-          kind = 'floating',
-        },
-      }
-    end,
+  },
+  popup = {
+    kind = 'floating',
+  },
+  stash = {
+    kind = 'floating',
+  },
+  commit_editor = {
+    kind = 'floating',
+    staged_diff_split_kind = 'auto',
+  },
+  commit_view = {
+    kind = 'floating',
+  },
+  preview_buffer = {
+    kind = 'floating',
   },
 }
+
+vim.keymap.set('n', '<leader>gg', function()
+  require('neogit').open { kind = 'floating' }
+end, { desc = 'Open Neogit' })
 
 -- Useful alias for git which switches to main, pulls, and deletes local branches that do not exist on remote:
 --
