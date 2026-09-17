@@ -60,6 +60,33 @@ alias tc='clear; tmux clear-history; clear'
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+bindkey -v
+export KEYTIMEOUT=1
+
+bindkey -M vicmd 'j' vi-backward-char
+bindkey -M vicmd 'k' vi-down-line-or-history
+bindkey -M vicmd 'l' vi-up-line-or-history
+bindkey -M vicmd 'ø' vi-forward-char
+
+bindkey -M vicmd 'h' vi-first-non-blank
+bindkey -M vicmd 'æ' vi-end-of-line
+
+FD_EXCLUDES=(-E .git -E .cache -E target -E timeshift -E .npm -E .cargo -E .rustup -E node_modules -E Steam -E Games -E go -E .java -E '.local/state' -E '.local/share' -E snap -E .m2 -E Downloads -E .var)
+
+ffile() {
+  local file
+  file=$(fd --type f --hidden --strip-cwd-prefix "${FD_EXCLUDES[@]}" \
+    | fzf --preview '/usr/share/fzf/fzf-preview.sh {}')
+  [ -n "$file" ] && ${EDITOR:-vim} "$file"
+}
+
+fdir() {
+  local dir
+  dir=$(fd --type d --hidden --strip-cwd-prefix "${FD_EXCLUDES[@]}" -E .eclipse --full-path ~ \
+    | fzf --preview 'tree -a -C -L 2 {}')
+  [ -n "$dir" ] && cd "$dir"
+}
+
 function t() {
   {
     exec </dev/tty

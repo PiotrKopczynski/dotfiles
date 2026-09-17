@@ -137,7 +137,7 @@ do
   -- Automatically reload the file when it changes outside Neovim (like after a stash)
   vim.opt.autoread = true
 
-  -- Trigger checktime whenever you change focus or enter a buffer
+  -- Trigger reload when a file is modified outside of neovim
   vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
     callback = function()
       if vim.fn.mode() ~= 'c' then
@@ -305,18 +305,6 @@ do
   }
   vim.cmd.colorscheme 'gruvbox'
 
-  -- {
-  --   'ellisonleao/gruvbox.nvim',
-  --   priority = 1000,
-  --   config = true,
-  --   opts = {
-  --     palette_overrides = {
-  --       dark0_hard = '#252525',
-  --     },
-  --     contrast = 'hard',
-  --   },
-  -- },
-  --
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }
   -- Highlight todo, notes, etc in comments
@@ -393,11 +381,6 @@ do
         vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
       end
 
-      local client = vim.lsp.get_client_by_id(event.data.client_id)
-      if client and client.name == 'ltex' then
-        client.handlers['$/progress'] = function() end
-      end
-
       -- Rename the variable under your cursor.
       --  Most Language Servers support renaming across files, etc.
       map('gR', vim.lsp.buf.rename, '[R]e[n]ame')
@@ -444,6 +427,10 @@ do
       --
       -- When you move your cursor, the highlights will be cleared (the second autocommand).
       local client = vim.lsp.get_client_by_id(event.data.client_id)
+      if client and client.name == 'ltex' then
+        client.handlers['$/progress'] = function() end
+      end
+
       if client and client:supports_method('textDocument/documentHighlight', event.buf) then
         local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
         vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
@@ -555,10 +542,7 @@ do
             checkThirdParty = false,
             -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
             --  See https://github.com/neovim/nvim-lspconfig/issues/3189
-            library = vim.tbl_extend('force', vim.api.nvim_get_runtime_file('', true), {
-              '${3rd}/luv/library',
-              '${3rd}/busted/library',
-            }),
+            library = vim.api.nvim_get_runtime_file('', true),
           },
         })
       end,
@@ -579,6 +563,10 @@ do
   }
 
   require('mason').setup {}
+
+  require('mason-lspconfig').setup {
+    automatic_enable = false, -- Change this to true if you want to automatically enable servers that are installed manually (e.g. via :Mason / :MasonInstall)
+  }
 
   local ensure_installed = vim.tbl_keys(servers or {})
   vim.list_extend(ensure_installed, {
@@ -663,27 +651,27 @@ do
           -- if cmp.is_visible() then
           --   return cmp.accept()
           -- end
-          if cmp.is_visible() then
-            return cmp.cancel()
-          end
-
+          -- if cmp.is_visible() then
+          --   return cmp.cancel()
+          -- end
+          --
           -- Check if we're right before a closing character
-          local col = vim.fn.col '.'
-          local line = vim.api.nvim_get_current_line()
-          local char = line:sub(col, col)
+          -- local col = vim.fn.col '.'
+          -- local line = vim.api.nvim_get_current_line()
+          -- local char = line:sub(col, col)
 
-          if char:match '[%)%]%}"\'>%`´]' then
-            -- Move cursor right to jump out
-            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Right>', true, true, true), 'n', true)
-            return true
-          end
+          -- if char:match '[%)%]%}"\'>%`´]' then
+          --   -- Move cursor right to jump out
+          --   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Right>', true, true, true), 'n', true)
+          --   return true
+          -- end
 
           -- Check if we're in a snippet and can jump forward
-          local luasnip = require 'luasnip'
-          if luasnip.expand_or_jumpable() then
-            luasnip.expand_or_jump()
-            return true
-          end
+          -- local luasnip = require 'luasnip'
+          -- if luasnip.expand_or_jumpable() then
+          --   luasnip.expand_or_jump()
+          --   return true
+          -- end
 
           -- Fall back to normal tab
           return false
@@ -752,6 +740,12 @@ do
     if not vim.treesitter.language.add(language) then
       return
     end
+
+    -- Check if the buffer is valid (might not be after install completes)
+    if not vim.api.nvim_buf_is_valid(buf) then
+      return
+    end
+
     -- Enable syntax highlighting and other treesitter features
     vim.treesitter.start(buf, language)
 
