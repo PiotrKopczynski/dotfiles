@@ -108,6 +108,10 @@ set notimeout
 " Show the package contents of the current class in the project tree GUI. Use this to mimic some of the oil-plugin functionality
 nnoremap - :action SelectIn<CR>
 
+" Remap visual block code due to Mac keyboard conflicts
+nmap <C-b> <C-v>
+vmap <C-b> <C-v>
+
 " ////////////// NOTES /////////////////
 " Disable tabs in intellij Settings -> Editor ->  General -> Editor Tabs. There set Tab position to None and also limit the number of open tabs.
 " Allow changing the font size using the mousewheel in Editor -> General

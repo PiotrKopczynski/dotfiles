@@ -25,3 +25,8 @@ vim.keymap.set('n', '<leader>gD', function()
     vim.cmd 'DiffviewOpen'
   end
 end, { desc = 'Toggle Diffview' })
+
+-- View diffview comparing current branch with origin/main
+vim.keymap.set('n', '<leader>gc', function()
+  vim.cmd 'DiffviewOpen origin/main...HEAD'
+end, { desc = 'compare with origin/main' })
